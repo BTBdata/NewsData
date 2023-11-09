@@ -1,0 +1,50 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Nov  7 22:48:07 2023
+
+@author: BTB Data Solutions Ben Bergenstein
+"""
+
+# pip install psycopg2 
+import psycopg2 
+import numpy as np 
+import psycopg2.extras as extras 
+import pandas as pd 
+import os
+
+def push_raw_news(conn, df, table): 
+	tuples = [tuple(x) for x in df.to_numpy()] 
+	cols = ','.join(list(df.columns)) 
+	# SQL query to execute 
+	query = "INSERT INTO %s(%s) VALUES %%s" % (table, cols) 
+	cursor = conn.cursor() 
+	try: 
+		extras.execute_values(cursor, query, tuples) 
+		conn.commit() 
+	except (Exception, psycopg2.DatabaseError) as error: 
+		print("Error: %s" % error) 
+		conn.rollback() 
+		cursor.close() 
+		return 1
+	print("the dataframe is inserted") 
+	cursor.close() 
+
+
+def main():
+    # establish connection to server
+    conn = psycopg2.connect( 
+    	database= "BTBdataSolutions", user='postgres', password='Igetitnow007@', host='localhost', port='5433')
+     
+    # dir of files to process
+    directory = r'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\BTBdataSolutions\main\sql_setup\push'    
+    # iterate over files in directory
+    for filename in os.listdir(directory):
+        f = os.path.join(directory, filename)  
+        df = pd.read_csv(f,encoding='utf-8')  
+        
+        push_raw_news(conn, df, 'raw_news_data') 
+
+
+
+if __name__ == "__main__":
+    main()
