@@ -1,11 +1,11 @@
 
 # -*- coding: utf-8 -*-
 """
-Created on: 12/5/2023 
+Created on Fri Sep 29 10:51:36 2023
 
 @author: BTB Data Solutions, Ben Bergenstein
 
-NLP Text Preprocessing and NLP extractions Unsupervised - clean text, noun chunks, NER, keywords, broad topic, subtopic betaversion, sentiment analysis.
+NLP Text Preprocessing and NER parser.
 """
 import pickle as pkl
 import spacy
@@ -56,6 +56,7 @@ import yake
 import textacy
 import matplotlib.pylab as plt
 import networkx as nx
+import unicodedata
 
 nlp = spacy.load('en_core_web_md')
 
@@ -183,7 +184,7 @@ def read_in_docs_NER():
         # merge 2 cols into 1 col
         #df['text_merged'] = df[['new_title', 'text']].apply(lambda x: ' '.join(x), axis=1)
         # updated column merge 11/2023
-        df['text_merged'] = df['new_title'] + '.' + df['article_text']
+        df['text_merged'] = df['new_title'] + '. ' + df['article_text']
         # join multiple lists into separate cols
         df["people"],df["norp"],df["fac"],df["org"],df["gpe"],df["loc"],df["product"],df["event"],df['date'],df['percent'],df['quant'],df['ordinal'],df['money'],df['cardinal'] = zip(*df["text_merged"].map(ner_extraction))
         
@@ -254,15 +255,13 @@ def yake_keywords(text):
     kw_extractor = yake.KeywordExtractor()
     language = "en"
     max_ngram_size = 5
-    deduplication_threshold = 0.3
+    deduplication_threshold = 0.1
     numOfKeywords = 4
     custom_kw_extractor = yake.KeywordExtractor(lan=language, n=max_ngram_size, dedupLim=deduplication_threshold, top=numOfKeywords, features=None)
-    keywords = custom_kw_extractor.extract_keywords(text)
-    
-    for kw in keywords:
-        #print(kw)
+    result = custom_kw_extractor.extract_keywords(text)   
+    for kw in result:
         return kw
-
+    
 ###################### TEXT PREPROCESSING & NOUN PHRASE #################################
 
 # make all text lowercase
@@ -315,11 +314,11 @@ def remove_emojis(data):
                       "]+", re.UNICODE)
     return re.sub(emoj, '', data)
 
-# Clean two datapoints in same cell for yake keywords
-def clean_keywords(x):
-    kw = x.split(',')[0]
-    score = x.split(',')[1]
-    return kw, score
+def remove_accents(x):
+    x = str(x)
+    nfkd_form = unicodedata.normalize('NFKD', x)
+    return u"".join([c for c in nfkd_form if not unicodedata.combining(c)])
+
 
 def clean_text():
     # read docs in from ner_out
@@ -329,9 +328,17 @@ def clean_text():
         f = os.path.join(directory, filename)      
         df = pd.read_csv(f,encoding='utf-8')  
         # drop duplications
-        df.drop_duplicates(subset='text_merged',keep='first', inplace=True)
+        df.drop_duplicates(subset='text_merged',keep='first', inplace=True)   
+        # remove special chars
+        #df['Text'] = df.Text.astype(str).apply(lambda x: re.sub('[^A-Za-z0-9.]+', ' ',x))
+        
+        # remove accents
+        df['accent'] = df['text_merged'].apply(remove_accents)
+        # remove hyphen add space
+        df['hyphen'] = df['accent'].apply(hyphen)
         # lower
-        df['lower'] = df['text_merged'].apply(lambda x: lower_text(str(x)))   
+        df['lower'] = df['hyphen'].apply(lambda x: lower_text(str(x)))  
+        
         # remove emojis
         df['emoji_text'] = df['lower'].apply(remove_emojis) 
         # remove punctuation
@@ -346,17 +353,15 @@ def clean_text():
         df['clean_no_stop_lemmatized'] = df['clean_no_stopwords'].apply(lambda x: lemmatize_words(x))   
         
         ########### noun_chunks ###########
-        df['noun_phrase'] = df['clean_text'].apply(noun_chunks_return)
+        df['noun_phrase'] = df['clean_no_stopwords'].apply(noun_chunks_return)
         
         ########### YAKE KEYWORDS #########
-        df['keywords'] = df['clean_text'].apply(yake_keywords)
+        df['keywords'] = df['clean_no_stopwords'].apply(yake_keywords)
         
-        ########### CLEAN YAKE RESULTS #################
-        df['top_keywords'],df['keywords_score'] = zip(*df['keywords'].map(get_sent))    
         
         # clean up not used columns 
-        df = df.drop(columns=['lower','num_text','text_clean', 'emoji_text', 'keywords', 'new_title', 'text_merged',
-                              'clean_text', 'clean_no_stop_lemmatized', 'title', 'article_text'])
+        df = df.drop(columns=['hyphen', 'accent','lower','num_text','text_clean', 'emoji_text', 'new_title', 'text_merged',
+                               'title', 'article_text'])
              
         df.to_csv(Fr'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\clean_out\{filename}', index=False, encoding='utf-8')       
   
@@ -442,7 +447,7 @@ def get_preds():
         # map topics
         df['broad_topic_out'] = df['sub_topic'].apply(map_topics)
         # drop columns not needed
-        df = df.drop(columns=['clean_no_stopwords'])
+        #df = df.drop(columns=['clean_no_stopwords'])
         # to csv
         df.to_csv(Fr'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\out\nlp_bv1_{timestr}.csv', index=False)
 
