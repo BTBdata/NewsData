@@ -61,6 +61,7 @@ import unicodedata
 nlp = spacy.load('en_core_web_md')
 
 def end_sents(x):
+    x = str(x)
     end = x + '.'
     return end
 
@@ -163,6 +164,10 @@ def clean_folders():
     clean_out = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\clean_out'
     ner_temp = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\ner_temp'
     sent_out = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\sent_out'
+    # clean folders for step 2 (dev_subtopic_textacy_bbow_phrasematcher_bv1.py)
+    temp = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\temp'
+    temp2 = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\temp2'
+    pre_out = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\pre_out'
     
     dirs = [ner_out, clean_out, ner_temp, sent_out]
     for i in dirs:
@@ -449,7 +454,7 @@ def get_preds():
         # drop columns not needed
         #df = df.drop(columns=['clean_no_stopwords'])
         # to csv
-        df.to_csv(Fr'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\out\nlp_bv1_{timestr}.csv', index=False)
+        df.to_csv(Fr'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\preprocessed_NLP_Files\nlp_preprocessing_bv1_{timestr}.csv', index=False)
 
 ###################################################################
 
