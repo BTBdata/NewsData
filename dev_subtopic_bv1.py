@@ -2,7 +2,7 @@
 """
 Created on Sat Jan  6 12:28:54 2024
 
-@author: benja
+@author: BTB
 """
 
 import spacy
@@ -176,18 +176,18 @@ def clean_noun_phrases(x):
 
     ## GET DOCUMENTS ##
 def get_docs():
-    df = pd.read_csv(r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\out\nlp_bv1_20231217_194152.csv', encoding='utf-8')
+    df = pd.read_csv(r'C:\BTBdata\nlp_bv1_20231217_194152.csv', encoding='utf-8')
     ## CALL BBOW PHRASE MATCHER ##
     df['new_subtopic'] = df['clean_no_stop_lemmatized'].apply(bbow_phrases)
     
     ## CALL KEY TERMS ##
     df['key_phrase_raw'] = df['clean_text'].apply(parse_keywords)
-    df.to_csv(r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\temp\subtopics_bv1.csv', index=False)
+    df.to_csv(r'BTBdata\subtopics_bv1.csv', index=False)
     clean_subtopic() 
     
     
 def clean_subtopic():
-    df = pd.read_csv(r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\temp\subtopics_bv1.csv', encoding='utf-8')
+    df = pd.read_csv(r'C:\BTBdata\subtopics_bv1.csv', encoding='utf-8')
     
     ## CLEAN BBOW RESULTS ##
     df['subtopic_words'] = df['new_subtopic'].apply(clean_bbow_results)
@@ -205,7 +205,7 @@ def clean_subtopic():
     #df2 = pd.concat([df, df['new_subtopics'].str.get_dummies(sep=',')], axis=1)
     df.drop(columns=['keywords','new_subtopic', 'key_phrase_raw','noun_phrase',], axis=1, inplace=True)
     
-    df.to_csv(r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\out\model_results_bv1.csv', index=False)
+    df.to_csv(r'C:\BTBdata\model_results_bv1.csv', index=False)
 
   
 get_docs()    
