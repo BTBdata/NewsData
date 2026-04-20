@@ -2,7 +2,7 @@
 """
 Created on Tue Nov  7 23:21:37 2023
 
-@author: BTB Data Solutions - Benjamin Bergenstein:
+@author: BTB Data  - Benjamin B:
     script to fetch raw news articles and standardize them before pushing to database.
 """
 
@@ -21,7 +21,7 @@ def generate_uuid():
 def prep_main_news():
     uuid1 = []
     # dir of files to process
-    directory = r'C:\Users\Administrator\Documents\raw_api_news_main'    
+    directory = r'C:\raw_api_news_main'    
     # iterate over files in directory
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
@@ -33,12 +33,12 @@ def prep_main_news():
         df['article_id'] = pd.Series(uuid1)
         df.rename(columns={'text':'article_text', 'source':'source_type'}, inplace=True)
         df2 = df[['article_id', 'title_id', 'title', 'article_text', 'source_type', 'parsed_date']]
-        df2.to_csv(Fr'C:\Users\Administrator\Documents\push_raw_news\{filename}', index=False)
+        df2.to_csv(Fr'C:\push_raw_news\{filename}', index=False)
  
 def prep_bbc_news():
     uuid2 = []
     # dir of files to process
-    directory = r'C:\Users\Administrator\Documents\raw_news_articles'    
+    directory = r'C:\raw_news_articles'    
     # iterate over files in directory
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
@@ -50,7 +50,7 @@ def prep_bbc_news():
         df['article_id'] = pd.Series(uuid2)
         df.rename(columns={'title_hash':'title_id', 'summary':'article_text','type':'source_type'}, inplace=True)                         
         db = df[['article_id', 'title_id', 'title', 'article_text','source_type', 'parsed_date']]       
-        db.to_csv(Fr'C:\Users\Administrator\Documents\push_raw_news\{filename}', index=False)
+        db.to_csv(Fr'C:\push_raw_news\{filename}', index=False)
         
 def main():
     prep_main_news()
