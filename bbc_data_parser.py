@@ -29,8 +29,7 @@ def get_bbc_headlines():
     
     df2 = df[['title','summary','published','parsed_date','parsed_time','type', 'title_hash']]
     file_name = file_date + '.csv'
-    # local
-    #df2.to_csv(rf'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\data_dfs/{file_name}', index=False)
+    
     # google drive
     df2.to_csv(f'/content/drive/My Drive/BTBdataSolutions_ArticleData/{file_name}', index=False)
 get_bbc_headlines()
