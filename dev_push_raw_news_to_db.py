@@ -2,7 +2,7 @@
 """
 Created on Tue Nov  7 22:48:07 2023
 
-@author: BTB Data Ben Bergenstein
+@author: BTB Data Ben B
 """
 
 # pip install psycopg2 
@@ -33,7 +33,7 @@ def push_raw_news(conn, df, table):
 def main():
     # establish connection to server
     conn = psycopg2.connect( 
-    	database= "BTBdataSolutions", user='postgres', password='Igetitnow007@', host='localhost', port='5433')
+    	database= "BTBdata", user='postgres', password='Igetitnow007@', host='localhost', port='5433')
      
     # dir of files to process
     directory = r'C:\BTBdata\push'    
