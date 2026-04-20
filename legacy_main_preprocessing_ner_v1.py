@@ -2,7 +2,7 @@
 """
 Created on Fri Sep 29 10:51:36 2023
 
-@author: BTB Data Solutions, Ben Bergenstein
+@author: BTB Data, Ben Bergenstein
 
 NLP Text Preprocessing and NER parser.
 """
@@ -133,7 +133,7 @@ def ner_extraction(data):
 
 def read_in_docs_NER():
     # dir of files to process
-    directory = r'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\BTBdataSolutions\main\raw_text'    
+    directory = r'C:\BTBdata\raw_text'    
     # iterate over files in directory
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
@@ -147,10 +147,10 @@ def read_in_docs_NER():
         # join multiple lists into separate cols
         df["people"],df["norp"],df["fac"],df["org"],df["gpe"],df["loc"],df["product"],df["event"],df['date'],df['percent'],df['quant'],df['ordinal'],df['money'],df['cardinal'] = zip(*df["text_merged"].map(ner_extraction))
         
-        df.to_csv(Fr'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\BTBdataSolutions\main\ner_temp\{file_name}', index=False)
+        df.to_csv(Fr'C:\BTBdata\ner_temp\{file_name}', index=False)
            
 def clean_ner():
-    directory = r'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\BTBdataSolutions\main\ner_temp'  
+    directory = r'C:\BTBdata\ner_temp'  
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
         df = pd.read_csv(f,encoding='utf-8') 
@@ -171,7 +171,7 @@ def clean_ner():
         df['money'] = df['money'].str.replace(expr, '', regex=True)
         df['cardinal'] = df['cardinal'].str.replace(expr, '', regex=True)
         
-        df.to_csv(Fr'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\BTBdataSolutions\main\ner_out\{filename}', index=False)
+        df.to_csv(Fr'C:\BTBdata\ner_out\{filename}', index=False)
         print('NER complete')
 
 ######################### SENTIMENT FLAIR DISTILBERT ###############################
@@ -187,7 +187,7 @@ def get_sent(x):
 
 def sentiment_text():   
     # dir of files to process
-    directory = r'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\BTBdataSolutions\main\ner_out'    
+    directory = r'C:\BTBdata\ner_out'    
     # iterate over files in directory
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
@@ -195,7 +195,7 @@ def sentiment_text():
         file_name = timestr + '.csv'  
         df = pd.read_csv(f,encoding='utf-8')       
         df['sentiment_direction'],df['sentiment_score'] = zip(*df['text_merged'].map(get_sent))    
-        df.to_csv(Fr'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\BTBdataSolutions\main\sent_out\{filename}', index=False)
+        df.to_csv(Fr'C:\BTBdata\sent_out\{filename}', index=False)
 
 
 def hyphen(x): 
@@ -211,7 +211,7 @@ def remove_whitespace(text):
     
 def graph_docs():
     # dir of files to process
-    directory = r'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\BTBdataSolutions\main\sent_out'    
+    directory = r'C:\BTBdata\sent_out'    
     # iterate over files in directory
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
@@ -232,7 +232,7 @@ def graph_docs():
     # clean up columns
     df = df.drop(columns=['title','old_text', 'new_title', 'text_merged', 'new_text1', 'new_text2'])
      
-    df.to_csv(Fr'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\BTBdataSolutions\main\graph_out\{file_name}', index=False)
+    df.to_csv(Fr'C:\BTBdata\graph_out\{file_name}', index=False)
         
 ###################### TEXT PREPROCESSING & NOUN PHRASE #################################
 
@@ -294,7 +294,7 @@ def lemmatize_words(text):
        
 def clean_text():
     # read docs in from ner_out
-    directory = r'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\BTBdataSolutions\main\sent_out'    
+    directory = r'C:\BTBdata\sent_out'    
     # iterate over files in directory
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)      
@@ -317,7 +317,7 @@ def clean_text():
         # clean up not used columns 
         df = df.drop(columns=['lower','num_text','text_clean'])
            
-        df.to_csv(Fr'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\BTBdataSolutions\main\clean_out\{filename}', index=False, encoding='utf-8')       
+        df.to_csv(Fr'C:\BTBdata\clean_out\{filename}', index=False, encoding='utf-8')       
   
 ######################################### TOPIC MODELING 1 #######################################
 # Government/politics Health Sports Education Business/Finance
@@ -390,7 +390,7 @@ def predict(text):
 
 def get_preds():
     # read docs
-    directory = r'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\BTBdataSolutions\main\clean_out'    
+    directory = r'C:\BTBdata\clean_out'    
     # iterate over files in directory
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
@@ -400,7 +400,7 @@ def get_preds():
         # map topics
         df['broad_topic_out'] = df['broad_topic'].apply(map_topics)
         # to csv
-        df.to_csv(r'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\BTBdataSolutions\main\out\nlp_v1.csv', index=False)
+        df.to_csv(r'C:\BTBdata\nlp_v1.csv', index=False)
 
     
 ###################################################################
