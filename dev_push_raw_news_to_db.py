@@ -2,7 +2,7 @@
 """
 Created on Tue Nov  7 22:48:07 2023
 
-@author: BTB Data Solutions Ben Bergenstein
+@author: BTB Data Ben Bergenstein
 """
 
 # pip install psycopg2 
@@ -36,7 +36,7 @@ def main():
     	database= "BTBdataSolutions", user='postgres', password='Igetitnow007@', host='localhost', port='5433')
      
     # dir of files to process
-    directory = r'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\BTBdataSolutions\main\sql_setup\push'    
+    directory = r'C:\BTBdata\push'    
     # iterate over files in directory
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)  
