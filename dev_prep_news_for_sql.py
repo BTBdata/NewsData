@@ -2,7 +2,7 @@
 """
 Created on Tue Nov  7 23:21:37 2023
 
-@author: BTB Benjamin Bergenstein:
+@author: BTB:
     script to fetch raw news articles and standardize them before pushing to database.
 """
 
@@ -27,7 +27,7 @@ def prep_main_news():
  
 def prep_bbc_news():
     # dir of files to process
-    directory = r'C:BTBdataSolutions_Project\raw_bbc'    
+    directory = r'C:BTBdata\raw_bbc'    
     # iterate over files in directory
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
