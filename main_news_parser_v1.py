@@ -2,7 +2,7 @@
 """
 Created on Thu Sep 28 11:26:41 2023
 
-@author: BTBdataSolutions Ben Bergenstein
+@author: BTBdata
 """
 
 import feedparser
@@ -14,7 +14,7 @@ import pandas as pd
 
 # EXPLORE RSS FEEDS
 def get_rss_keys():
-    feed = feedparser.parse("https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114").keys()
+    feed = feedparser.parse("https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=1").keys()
     print("RSS FEED KEYS: ", feed)
     # get keys from feed
     #print("KEYS FRM FEED: ", feed.entries[0].keys())
@@ -34,7 +34,7 @@ def cnbc_data():
     file_name = timestr + '.csv'
     source = 'cnbc'
     cnbc_data = []
-    cnbc_feeds = ["https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114",
+    cnbc_feeds = ["https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=",
     "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100727362",
     "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=15837362",
     "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=19832390",
@@ -57,7 +57,7 @@ def cnbc_data():
         except:
             pass
     df = pd.DataFrame(cnbc_data, columns=["title_id","parsed_date","title","text","source"])     
-    df.to_csv(Fr'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\raw_data2\{file_name}', encoding='utf-8', index=False) 
+    df.to_csv(Fr'C:BTBdata\raw_data2\{file_name}', encoding='utf-8', index=False) 
     
     
 def cnn_data():
@@ -88,7 +88,7 @@ def cnn_data():
         except:
             pass
     df = pd.DataFrame(cnn_data, columns=["title_id","parsed_date","title","text","source"])     
-    df.to_csv(Fr'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\raw_data2\{file_name}', encoding='utf-8', index=False)  
+    df.to_csv(Fr'C:\BTBdata\raw_data2\{file_name}', encoding='utf-8', index=False)  
     
     
     
@@ -126,7 +126,7 @@ def nytimes_data():
         except:
             pass
     df = pd.DataFrame(nytimes_data, columns=["title_id","parsed_date","title","text","source"])     
-    df.to_csv(Fr'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\raw_data2\{file_name}', encoding='utf-8', index=False) 
+    df.to_csv(Fr'C:\BTBdata\raw_data2\{file_name}', encoding='utf-8', index=False) 
     
    
     
@@ -154,7 +154,7 @@ def cbs_data():
         except:
             pass
     df = pd.DataFrame(cbs_data, columns=["title_id","parsed_date","title","text","source"])     
-    df.to_csv(Fr'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\raw_data2\{file_name}', encoding='utf-8', index=False) 
+    df.to_csv(Fr'C:\BTBdata\raw_data2\{file_name}', encoding='utf-8', index=False) 
     
     
     
@@ -190,7 +190,7 @@ def un_data():
         except:
             pass
     df = pd.DataFrame(un_data, columns=["title_id","parsed_date","title","text","source"])     
-    df.to_csv(Fr'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\raw_data2\{file_name}', encoding='utf-8', index=False) 
+    df.to_csv(Fr'C:\BTBdata\raw_data2\{file_name}', encoding='utf-8', index=False) 
     
     
 def dod_data():
@@ -213,7 +213,7 @@ def dod_data():
         except:
             pass
     df = pd.DataFrame(dod_data, columns=["title_id","parsed_date","title","text","source"])     
-    df.to_csv(Fr'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\raw_data2\{file_name}', encoding='utf-8', index=False) 
+    df.to_csv(Fr'C:\BTBdata\raw_data2\{file_name}', encoding='utf-8', index=False) 
     
 
 def politco_data():
@@ -238,7 +238,7 @@ def politco_data():
         except:
             pass
     df = pd.DataFrame(politco_data, columns=["title_id","parsed_date","title","text","source"])     
-    df.to_csv(Fr'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\raw_data2\{file_name}', encoding='utf-8', index=False) 
+    df.to_csv(Fr'C:\BTBdata\raw_data2\{file_name}', encoding='utf-8', index=False) 
     
     
     
@@ -265,7 +265,7 @@ def sci_data():
         except:
             pass
     df = pd.DataFrame(sci_data, columns=["title_id","parsed_date","title","text","source"])     
-    df.to_csv(Fr'C:\Users\benja\OneDrive\Documents\BTBdataSolutions_Project\raw_data2\{file_name}', encoding='utf-8', index=False) 
+    df.to_csv(Fr'C:\BTBdata\raw_data2\{file_name}', encoding='utf-8', index=False) 
     
 
 def main():
