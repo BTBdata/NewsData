@@ -3,7 +3,7 @@
 """
 Created on Fri Sep 29 10:51:36 2023
 
-@author: BTB Data, Ben Bergenstein
+@author: BTB Data, Ben B
 
 NLP Text Preprocessing and NER parser.
 """
