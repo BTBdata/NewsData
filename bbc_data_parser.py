@@ -31,5 +31,5 @@ def get_bbc_headlines():
     file_name = file_date + '.csv'
     
     # google drive
-    df2.to_csv(f'/content/drive/My Drive/BTBdataSolutions_ArticleData/{file_name}', index=False)
+    df2.to_csv(f'/BTBdata/{file_name}', index=False)
 get_bbc_headlines()
