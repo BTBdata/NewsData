@@ -159,10 +159,10 @@ def del_contents(folder):
             print('Failed to delete %s. Reason: %s' % (file_path, e))
                     
 def clean_folders():    
-    ner_out = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\ner_out'
-    clean_out = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\clean_out'
-    ner_temp = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\ner_temp'
-    sent_out = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\sent_out'
+    ner_out = r'C:\BTBdata\ner_out'
+    clean_out = r'C:\BTBdata\clean_out'
+    ner_temp = r'C:\BTBdata\ner_temp'
+    sent_out = r'C:\BTBdata\sent_out'
     
     dirs = [ner_out, clean_out, ner_temp, sent_out]
     for i in dirs:
@@ -172,7 +172,7 @@ def clean_folders():
 ###################### START ########################## 
 def read_in_docs_NER():
     # dir of files to process
-    directory = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\raw_text'    
+    directory = r'C:\BTBdata\raw_text'    
     # iterate over files in directory
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
@@ -188,10 +188,10 @@ def read_in_docs_NER():
         # join multiple lists into separate cols
         df["people"],df["norp"],df["fac"],df["org"],df["gpe"],df["loc"],df["product"],df["event"],df['date'],df['percent'],df['quant'],df['ordinal'],df['money'],df['cardinal'] = zip(*df["text_merged"].map(ner_extraction))
         
-        df.to_csv(Fr'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\ner_temp\{file_name}', index=False)
+        df.to_csv(Fr'C:BTBdata\ner_temp\{file_name}', index=False)
            
 def clean_ner():
-    directory = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\ner_temp'  
+    directory = r'C:BTBdata\ner_temp'  
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
         df = pd.read_csv(f,encoding='utf-8') 
@@ -212,7 +212,7 @@ def clean_ner():
         df['money'] = df['money'].str.replace(expr, '', regex=True)
         df['cardinal'] = df['cardinal'].str.replace(expr, '', regex=True)
         
-        df.to_csv(Fr'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\ner_out\{filename}', index=False)
+        df.to_csv(Fr'C:\BTBdata\ner_out\{filename}', index=False)
         print('NER complete')
 
 ######################### SENTIMENT FLAIR DISTILBERT ###############################
@@ -228,7 +228,7 @@ def get_sent(x):
 
 def sentiment_text():   
     # dir of files to process
-    directory = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\ner_out'    
+    directory = r'C:\BTBdata\ner_out'    
     # iterate over files in directory
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
@@ -236,7 +236,7 @@ def sentiment_text():
         file_name = timestr + '.csv'  
         df = pd.read_csv(f,encoding='utf-8')       
         df['sentiment_direction'],df['sentiment_score'] = zip(*df['text_merged'].map(get_sent))    
-        df.to_csv(Fr'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\sent_out\{filename}', index=False)
+        df.to_csv(Fr'C:BTBdata\sent_out\{filename}', index=False)
 
 
 def hyphen(x): 
@@ -322,7 +322,7 @@ def remove_accents(x):
 
 def clean_text():
     # read docs in from ner_out
-    directory = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\sent_out'    
+    directory = r'C:\BTBdata\sent_out'    
     # iterate over files in directory
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)      
@@ -363,7 +363,7 @@ def clean_text():
         df = df.drop(columns=['hyphen', 'accent','lower','num_text','text_clean', 'emoji_text', 'new_title', 'text_merged',
                                'title', 'article_text'])
              
-        df.to_csv(Fr'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\clean_out\{filename}', index=False, encoding='utf-8')       
+        df.to_csv(Fr'C:\BTBdata\clean_out\{filename}', index=False, encoding='utf-8')       
   
 ######################################### TOPIC MODELING 1 #######################################
 # Government/politics Health Sports Education Business/Finance
@@ -437,7 +437,7 @@ def predict(text):
 def get_preds():
     # read docs
     timestr = time.strftime("%Y%m%d_%H%M%S")         
-    directory = r'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\clean_out'    
+    directory = r'C:\BTBdata\clean_out'    
     # iterate over files in directory
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
@@ -449,7 +449,7 @@ def get_preds():
         # drop columns not needed
         #df = df.drop(columns=['clean_no_stopwords'])
         # to csv
-        df.to_csv(Fr'C:\Users\benja\Documents\BTBdataSolutions\BTBdataSolutions\main\out\nlp_bv1_{timestr}.csv', index=False)
+        df.to_csv(Fr'C:\BTBdata\nlp_bv1_{timestr}.csv', index=False)
 
 ###################################################################
 
